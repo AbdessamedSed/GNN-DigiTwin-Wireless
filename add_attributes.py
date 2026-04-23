@@ -64,8 +64,8 @@ def process_simulation_data(input_filename, output_filename, tx_power, sched_dis
 
 # --- PARAMÈTRES ---
 TX_POWER = 0.01
-SCHEDULING = "PF"
-QUEUE_SIZE = "10MiB"
+SCHEDULING = "MAXCI"
+QUEUE_SIZE = "100KiB"
 
 # --- LANCEMENT ---
 process_simulation_data(
