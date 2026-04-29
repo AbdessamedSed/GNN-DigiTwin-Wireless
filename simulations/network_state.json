@@ -1,0 +1,25 @@
+[  {
+    "timestamp": 0.1,
+    "nodes": [
+      { "id": "ue0", "type": "ue", "serving_gnb": "gnb1", "x": 963.761, "y": 461.257, "speed": 14.7608, "sinr_dl": 15.8234, "sinr_ul": 14.973 },
+      { "id": "ue1", "type": "ue", "serving_gnb": "gnb1", "x": 903.034, "y": 982.276, "speed": 15.2316, "sinr_dl": 15.407, "sinr_ul": 13.1613 },
+      { "id": "ue2", "type": "ue", "serving_gnb": "gnb1", "x": 115.799, "y": 576.936, "speed": 12.5052, "sinr_dl": 14.3673, "sinr_ul": 16.8572 },
+      { "id": "ue3", "type": "ue", "serving_gnb": "gnb1", "x": 604.554, "y": 59.9853, "speed": 15, "sinr_dl": 16.3023, "sinr_ul": 10.6785 },
+      { "id": "ue4", "type": "ue", "serving_gnb": "gnb1", "x": 220.765, "y": 576.031, "speed": 15, "sinr_dl": 16.3545, "sinr_ul": 29.8545 },
+      { "id": "ue5", "type": "ue", "serving_gnb": "gnb1", "x": 547.914, "y": 587.774, "speed": 5, "sinr_dl": 18.0811, "sinr_ul": 39.9323 },
+      { "id": "ue6", "type": "ue", "serving_gnb": "gnb1", "x": 551.191, "y": 585.904, "speed": 5, "sinr_dl": 17.4638, "sinr_ul": 29.2095 },
+      { "id": "ue7", "type": "ue", "serving_gnb": "gnb1", "x": 431.894, "y": 452.051, "speed": 0, "sinr_dl": 17.0341, "sinr_ul": 52.9744 },
+      { "id": "ue8", "type": "ue", "serving_gnb": "gnb1", "x": 483.406, "y": 474.243, "speed": 0, "sinr_dl": 18.6958, "sinr_ul": 54.5981 },
+      { "id": "ue9", "type": "ue", "serving_gnb": "gnb1", "x": 267.854, "y": 95.5232, "speed": 1.5, "sinr_dl": 15.1802, "sinr_ul": 6.07452 },
+      { "id": "ue10", "type": "ue", "serving_gnb": "gnb1", "x": 581.859, "y": 269.988, "speed": 30, "sinr_dl": 17.1727, "sinr_ul": 29.3452 },
+      { "id": "ue11", "type": "ue", "serving_gnb": "gnb1", "x": 134.506, "y": 268.905, "speed": 30, "sinr_dl": 16.0746, "sinr_ul": 15.3081 },
+      { "id": "ue12", "type": "ue", "serving_gnb": "gnb1", "x": 200.852, "y": 422.588, "speed": 20, "sinr_dl": 16.115, "sinr_ul": 21.6616 },
+      { "id": "ue13", "type": "ue", "serving_gnb": "gnb1", "x": 900, "y": 900, "speed": 0, "sinr_dl": 13.3264, "sinr_ul": 10.0159 },
+      { "id": "ue14", "type": "ue", "serving_gnb": "gnb1", "x": 410.966, "y": 572.497, "speed": 60, "sinr_dl": 17.3748, "sinr_ul": 39.999 },
+      { "id": "gnb0", "type": "gnb", "x": 500, "y": 500, "cell_loss_dl": 0, "cell_loss_ul": 0, "cell_thr_dl": 0, "cell_thr_ul": 0, "avg_avg_served_block_dl" : 0, "avg_avg_served_block_ul" : 0 }
+    ],
+    "flows": [
+
+    ]
+  }
+]
