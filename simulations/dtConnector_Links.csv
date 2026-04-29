@@ -1,0 +1,1 @@
+timestamp,src,dest,speed_src,speed_dest,posx_src,posy_src,posz_src,posx_dest,posy_dest,posz_dest,traffic_type,packet_size,interval,serving_gnb,distance,sinr_dl,sinr_ulmac_thr_dl,mac_thr_ul,mac_delay_dl,mac_delay_ul,blerDlSignal,blerUlSignal,packetLossDlSignal,packetLossUlSignal,

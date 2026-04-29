@@ -1,0 +1,14 @@
+source ~/venv/bin/activate
+source ~/omnet/omnetpp-6.3.0/setenv
+source ~/omnet/inet4.5/setenv
+
+
+cd ~/omnet/FiveG_network
+
+opp_makemake -f --deep \
+ -I../inet4.5/src \
+ -I../Simu5G/src \
+ -L../inet4.5/src \
+ -L../Simu5G/src \
+ -lINET -lsimu5g
+
