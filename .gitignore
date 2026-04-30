@@ -1,1 +1,22 @@
-*.vec
+out/
+FiveG_network
+Makefile
+*.o
+*.d
+*.pcap
+*.out*.vec
+
+
+
+results/
+simulations/results/
+
+# --- Python ---
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# --- Système et Logs ---
+*.log
+run.txt
+.DS_Store

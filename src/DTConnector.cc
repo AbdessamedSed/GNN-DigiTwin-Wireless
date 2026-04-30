@@ -391,7 +391,13 @@ void DTConnector::processIncomingSignal(cComponent *source, simsignal_t signalID
         if (srcPath.find(hostNames[i]) != std::string::npos) {
             
             // SINR
-            if (signalID == sinrDlSignal || signalID == measuredSinrDlSignal) lastSinrDl[i] = 10.0 * log10(value);
+            if (signalID == sinrDlSignal || signalID == measuredSinrDlSignal) {
+                if (value > 0.1) {  // 0.1 en linéaire correspond à -10 dB
+                    lastSinrDl[i] = 10.0 * log10(value);
+                } else {
+                    lastSinrDl[i] = 0.00000001; // Valeur "plancher" propre pour le graphique
+                }
+            }
             else if (signalID == sinrUlSignal || signalID == measuredSinrUlSignal) lastSinrUl[i] = value;
             else if (signalID == rcvdSinrD2DSignal) lastSinrD2D[i] = 10.0 * log10(value);
 
