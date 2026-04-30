@@ -19,50 +19,59 @@ def get_ue_metadata(ue_id_string):
     index = int(match.group())
     
     if 0 <= index <= 2:
-        return {"traffic_type": "EXPONENTIAL", "mobility_type": "GaussMarkov"}
-
-    # --- [DETERMINISTIC] : UEs 3, 4 ---
-    # sendInterval = 0.001s
-    elif 3 <= index <= 4:
-        return {"traffic_type": "DETERMINISTIC", "mobility_type": "Linear"}
-
-    # --- [UNIFORM] : UEs 5, 6 ---
-    # sendInterval = uniform(0.005s, 0.015s)
-    elif 5 <= index <= 6:
-        return {"traffic_type": "UNIFORM", "mobility_type": "Circle"}
-
-    # --- [DETERMINISTIC] : UEs 7, 8 (VBR Video) ---
-    # Note: messageLength est NORMAL, mais sendInterval est fixe (0.033s)
-    elif 7 <= index <= 8:
-        return {"traffic_type": "DETERMINISTIC", "mobility_type": "Stationary"}
-
-    # --- [ONOFF] : UE 9 ---
-    # sendInterval = uniform(0,1) < 0.8 ? 0.0002s : 0.4s (Modèle à deux états)
-    elif index == 9:
-        return {"traffic_type": "ONOFF", "mobility_type": "GaussMarkov"}
-
-    # --- [PPBP] : UEs 10, 11 (Pareto) ---
-    # sendInterval = pareto(0.001s, 1.3) -> Pareto correspond au type PPBP
-    elif 10 <= index <= 11:
-        return {"traffic_type": "PPBP", "mobility_type": "Linear"}
-
-    # --- [DETERMINISTIC] : UE 12 (URLLC) ---
-    # sendInterval = 0.01s
-    elif index == 12:
-        return {"traffic_type": "DETERMINISTIC", "mobility_type": "Circle"}
-
-    # --- [DETERMINISTIC] : UE 13 (IoT) ---
-    # sendInterval = 1s
-    elif index == 13:
-        return {"traffic_type": "DETERMINISTIC", "mobility_type": "Stationary"}
-
-    # --- [DETERMINISTIC] : UE 14 (Fast) ---
-    # sendInterval = 0.0005s
-    elif index == 14:
-        return {"traffic_type": "DETERMINISTIC", "mobility_type": "GaussMarkov_Fast"}
-
+        return {
+            "traffic_type": "EXPONENTIAL",
+            "mobility_type": "GaussMarkov"
+        }
+    
+    # --- [DETERMINISTIC] : UEs 3, 4, 5 ---
+    elif 3 <= index <= 5:
+        return {
+            "traffic_type": "DETERMINISTIC",
+            "mobility_type": "Stationary"
+        }
+    
+    # --- [UNIFORM] : UEs 6, 7, 8 ---
+    elif 6 <= index <= 8:
+        return {
+            "traffic_type": "UNIFORM",
+            "mobility_type": "Circle"
+        }
+    
+    # --- [NORMAL] : UEs 9, 10, 11 ---
+    elif 9 <= index <= 11:
+        return {
+            "traffic_type": "NORMAL",
+            "mobility_type": "Linear"
+        }
+    
+    # --- [ONOFF] : UEs 12, 13, 14 ---
+    elif 12 <= index <= 14:
+        return {
+            "traffic_type": "ONOFF",
+            "mobility_type": "GaussMarkov"
+        }
+    
+    # --- [PPBP / PARETO] : UEs 15, 16, 17 ---
+    elif 15 <= index <= 17:
+        return {
+            "traffic_type": "PPBP",
+            "mobility_type": "Stationary"
+        }
+    
+    # --- [AR1 / AUTOREGRESSIVE] : UEs 18, 19 ---
+    elif 18 <= index <= 19:
+        return {
+            "traffic_type": "AR1",
+            "mobility_type": "Linear"
+        }
+    
+    # Cas par défaut
     else:
-        return {"traffic_type": "DETERMINISTIC", "mobility_type": "Stationary"}
+        return {
+            "traffic_type": "DETERMINISTIC",
+            "mobility_type": "Stationary"
+        }
 
 # ===========================================================================
 # 2. PARAMÈTRES DE VARIATION ET CHEMINS
@@ -70,7 +79,7 @@ def get_ue_metadata(ue_id_string):
 # Valeurs pour la boucle d'automatisation
 POWERS = ["0.01W", "0.1W", "0.5W", "2W"]
 SCHEDULERS = ["PF", "MAXCI", "DRR",  "QOS_PF", "MAXCI_MB", "ALLOCATOR_BESTFIT"]
-QUEUE_SIZES = ["50 KiB", "100KiB", "2MiB", "10MiB"]
+QUEUE_SIZES = ["50KiB", "100KiB", "2MiB", "10MiB"]
 
 SCENARIO_PREFIX = "SC01"
 INI_FILE = "omnetpp.ini"
