@@ -4,6 +4,7 @@ import re
 import subprocess
 import matplotlib.pyplot as plt
 import shutil
+import time
 
 # ===========================================================================
 # 1. CONFIGURATION DES MÉTADONNÉES (TRAFIC ET MOBILITÉ)
@@ -81,7 +82,7 @@ POWERS = ["0.01W", "0.1W", "0.5W", "2W"]
 SCHEDULERS = ["PF", "MAXCI", "DRR",  "QOS_PF", "MAXCI_MB", "ALLOCATOR_BESTFIT"]
 QUEUE_SIZES = ["50KiB", "100KiB", "2MiB", "10MiB"]
 
-SCENARIO_PREFIX = "SC01"
+SCENARIO_PREFIX = "SC02"
 INI_FILE = "omnetpp.ini"
 CONFIG_NAME = "DT-Scenario"
 
@@ -104,39 +105,91 @@ def decrement_gnb_name(name):
     return name
 
 def process_simulation_json(input_path, output_path, power, sched, queue):
-    """Nettoie le JSON brut et ajoute les attributs demandés"""
+    """Nettoie le JSON brut, le répare si nécessaire et ajoute les attributs."""
     if not os.path.exists(input_path):
         return False
 
-    with open(input_path, 'r', encoding='utf-8') as f:
-        data = json.load(f)
+    # 1. Attendre que le système de fichiers relâche le fichier
+    time.sleep(2) 
 
-    for entry in data:
-        if "nodes" in entry:
-            for node in entry["nodes"]:
-                node_id = node.get("id", "")
-                if "serving_gnb" in node:
-                    node["serving_gnb"] = decrement_gnb_name(node["serving_gnb"])
+    data = None
+    try:
+        with open(input_path, 'r', encoding='utf-8') as f:
+            raw_content = f.read().strip()
+        
+        if not raw_content:
+            return False
 
-                if node_id.startswith("gnb"):
-                    node.update({"tx_power": power, "scheduling_discipline": sched, "queue_size": queue})
-                    node.pop("sinr_dl", None)
-                    node.pop("sinr_ul", None)
-                elif node_id.startswith("ue"):
-                    meta = get_ue_metadata(node_id)
-                    node.update({"qsize": queue, "traffic_type": meta["traffic_type"], "mobility_type": meta["mobility_type"]})
-                    node.pop("app", None)
-                    node.pop("bler", None)
+        try:
+            # Tentative de lecture standard
+            data = json.loads(raw_content)
+        except json.JSONDecodeError:
+            # 2. RÉPARATION : Si le JSON est coupé (fréquent avec OMNeT++)
+            print(f"   🔧 JSON malformé dans {input_path}. Tentative de réparation...")
+            
+            # On cherche la dernière accolade fermante d'un objet complet
+            last_object_end = raw_content.rfind('}')
+            if last_object_end != -1:
+                # On tronque le fichier au dernier objet valide
+                fixed_content = raw_content[:last_object_end + 1]
+                
+                # Si le fichier commençait par un crochet '[', on le ferme proprement
+                if raw_content.startswith('['):
+                    fixed_content += ']'
+                else:
+                    # Sinon on l'enveloppe pour garder une structure de liste
+                    fixed_content = '[' + fixed_content + ']'
+                
+                try:
+                    data = json.loads(fixed_content)
+                    print("   ✅ Réparation réussie.")
+                except Exception as e:
+                    print(f"   ❌ Échec critique de réparation : {e}")
+                    return False
+            else:
+                print("   ❌ Impossible de trouver un objet valide dans le fichier.")
+                return False
 
-        if "flows" in entry:
-            for flow in entry["flows"]:
-                flow.pop("app", None)
-                flow.pop("bler", None)
-                flow.pop("endToEndDelay", None)
+    except Exception as e:
+        print(f"   ❌ Erreur de lecture fichier : {e}")
+        return False
 
-    with open(output_path, 'w', encoding='utf-8') as f:
-        json.dump(data, f, indent=2)
-    return True
+    # 3. Vérification de sécurité pour éviter l'UnboundLocalError
+    if data is None:
+        return False
+
+    # 4. TRAITEMENT DES DONNÉES (Votre logique originale)
+    try:
+        for entry in data:
+            if "nodes" in entry:
+                for node in entry["nodes"]:
+                    node_id = node.get("id", "")
+                    if "serving_gnb" in node:
+                        node["serving_gnb"] = decrement_gnb_name(node["serving_gnb"])
+
+                    if node_id.startswith("gnb"):
+                        node.update({"tx_power": power, "scheduling_discipline": sched, "queue_size": queue})
+                        node.pop("sinr_dl", None)
+                        node.pop("sinr_ul", None)
+                    elif node_id.startswith("ue"):
+                        meta = get_ue_metadata(node_id)
+                        node.update({"qsize": queue, "traffic_type": meta["traffic_type"], "mobility_type": meta["mobility_type"]})
+                        node.pop("app", None)
+                        node.pop("bler", None)
+
+            if "flows" in entry:
+                for flow in entry["flows"]:
+                    flow.pop("app", None)
+                    flow.pop("bler", None)
+                    flow.pop("endToEndDelay", None)
+
+        with open(output_path, 'w', encoding='utf-8') as f:
+            json.dump(data, f, indent=2)
+        return True
+
+    except Exception as e:
+        print(f"   ⚠️ Erreur lors du traitement des données JSON : {e}")
+        return False
 
 # ===========================================================================
 # 4. GÉNÉRATION DES GRAPHIQUES (FIXED : THROUGHPUT & DELAY)
