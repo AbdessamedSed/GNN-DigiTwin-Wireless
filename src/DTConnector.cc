@@ -514,7 +514,7 @@ void DTConnector::exportData()
     if (hostNames[i].find("gnb") != std::string::npos) {
         // C'EST UN GNB : On met les métriques GLOBALES
         jsonFile << "\"type\": \"gnb\", "
-                << "\"x\": " << pos.x << ", \"y\": " << pos.y << ", "
+                << "\"x\": " << pos.x << ", \"y\": " << pos.y << ", " << ", \"z\": " << pos.z << " , "
                  << "\"cell_loss_dl\": " << lastRlcCellPacketLossDl[i] << ", "
                  << "\"cell_loss_ul\": " << lastRlcCellPacketLossUl[i] << ", "
                  << "\"cell_thr_dl\": " << lastRlcCellThroughputDl[i] << ", "
@@ -526,7 +526,7 @@ void DTConnector::exportData()
         // C'EST UN UE : On met les métriques PHYSIQUES
         jsonFile << "\"type\": \"ue\", "
                  << "\"serving_gnb\": \"" << servingGnb << "\", "
-                 << "\"x\": " << pos.x << ", \"y\": " << pos.y << ", "
+                 << "\"x\": " << pos.x << ", \"y\": " << pos.y << ", " << ", \"z\": " << pos.z << " , "
                  << "\"speed\": " << speed << ", "
                  << "\"sinr_dl\": " << lastSinrDl[i] << ", "
                  << "\"sinr_ul\": " << lastSinrUl[i];
@@ -562,7 +562,7 @@ void DTConnector::exportData()
                 f.type = "DL";
                 f.phySrc = "gnb"; 
                 f.phyDst = dest;
-                f.ueIndex = dstIdx; // Stats mesurées par le récepteur (UE)
+                f.ueIndex = dstIdx; // Stats mesurées par le récepteur (UE)!
                 f.packetSize = app->par("messageLength").intValue();
                 f.interval = app->par("sendInterval").doubleValue();
                 activeFlows.push_back(f);

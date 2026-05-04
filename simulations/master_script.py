@@ -44,40 +44,51 @@ def get_ue_metadata(ue_id_string):
     
     index = int(match.group())
     
-    if 0 <= index <= 29:
+    if 0 <= index <= 15:
+        # Code ini: sendInterval = 0.005s (Fixe)
         return {
             "traffic_type": "DETERMINISTIC", 
-            "mobility_type": "Stationary"
+            "mobility_type": "GaussMarkov",
+        }
+    elif 16 <= index <= 32:
+        # Code ini: sendInterval = 0.002s (Fixe)
+        return {
+            "traffic_type": "DETERMINISTIC", 
+            "mobility_type": "Linear",
         }
 
-    elif 30 <= index <= 49:
+    # --- TRANCHE URLLC (33 à 65) ---
+    elif 33 <= index <= 48:
+        # Code ini: sendInterval = exponential(0.01s)
         return {
             "traffic_type": "EXPONENTIAL", 
-            "mobility_type": "Linear"
+            "mobility_type": "Circle",
         }
-
-    elif 50 <= index <= 69:
+    elif 49 <= index <= 65:
+        # Code ini: sendInterval = 0.001s (Fixe)
         return {
-            "traffic_type": "UNIFORM", 
-            "mobility_type": "Stationary"
+            "traffic_type": "DETERMINISTIC", 
+            "mobility_type": "Stationary",
         }
 
-    elif 70 <= index <= 84:
-        return {
-            "traffic_type": "NORMAL", 
-            "mobility_type": "GaussMarkov"
-        }
-
-    elif 85 <= index <= 99:
+    # --- TRANCHE mMTC (66 à 99) ---
+    elif 66 <= index <= 80:
+        # Code ini: (uniform(0,1) < 0.1 ? 0.05s : 5s) -> Comportement Rafale
         return {
             "traffic_type": "ONOFF", 
-            "mobility_type": "Linear"
+            "mobility_type": "Stationary",
+        }
+    elif 81 <= index <= 99:
+        # Code ini: sendInterval = uniform(1s, 2s)
+        return {
+            "traffic_type": "UNIFORM", 
+            "mobility_type": "Linear",
         }
 
     else:
         return {
             "traffic_type": "DETERMINISTIC", 
-            "mobility_type": "Stationary"
+            "mobility_type": "Stationary",
         }
 
 # ===========================================================================
@@ -88,7 +99,7 @@ POWERS = ["0.01W", "0.1W", "0.5W", "2W"]
 SCHEDULERS = ["PF", "MAXCI", "DRR",  "QOS_PF", "MAXCI_MB", "ALLOCATOR_BESTFIT"]
 QUEUE_SIZES = ["50KiB", "100KiB", "2MiB", "10MiB"]
 
-SCENARIO_PREFIX = "SC02"
+SCENARIO_PREFIX = "SC04"
 INI_FILE = "omnetpp.ini"
 CONFIG_NAME = "DT-Scenario"
 
