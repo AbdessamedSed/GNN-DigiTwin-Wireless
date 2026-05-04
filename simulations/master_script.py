@@ -6,6 +6,31 @@ import matplotlib.pyplot as plt
 import shutil
 import time
 
+
+# ===========================================================================
+# 0. CONFIGURATION DE L'ENV OMNET
+# ===========================================================================
+def setup_omnet_env():
+    """Configure les variables d'environnement pour OMNeT++ et Simu5G."""
+    home = "/home/abdessamedseddiki"
+    omnet_path = f"{home}/omnet/omnetpp-6.3.0"
+    simu5g_path = f"{home}/omnet/Simu5G"
+    inet_path = f"{home}/omnet/inet4.5"
+
+    # Mise à jour du PATH (équivalent de source setenv)
+    bin_path = f"{omnet_path}/bin:{simu5g_path}/bin"
+    os.environ["PATH"] = bin_path + ":" + os.environ.get("PATH", "")
+
+    # Mise à jour du LD_LIBRARY_PATH pour trouver les fichiers .so (INET et Simu5G)
+    lib_path = f"{omnet_path}/lib:{inet_path}/src:{simu5g_path}/src"
+    os.environ["LD_LIBRARY_PATH"] = lib_path + ":" + os.environ.get("LD_LIBRARY_PATH", "")
+
+    # Variable pour les images OMNeT++
+    os.environ["OMNETPP_IMAGE_PATH"] = f"{omnet_path}/images"
+
+    print("✅ Environnement OMNeT++ et Simu5G activé dynamiquement.")
+
+
 # ===========================================================================
 # 1. CONFIGURATION DES MÉTADONNÉES (TRAFIC ET MOBILITÉ)
 # ===========================================================================
@@ -19,58 +44,39 @@ def get_ue_metadata(ue_id_string):
     
     index = int(match.group())
     
-    if 0 <= index <= 2:
+    if 0 <= index <= 29:
         return {
-            "traffic_type": "EXPONENTIAL",
-            "mobility_type": "GaussMarkov"
-        }
-    
-    # --- [DETERMINISTIC] : UEs 3, 4, 5 ---
-    elif 3 <= index <= 5:
-        return {
-            "traffic_type": "DETERMINISTIC",
+            "traffic_type": "DETERMINISTIC", 
             "mobility_type": "Stationary"
         }
-    
-    # --- [UNIFORM] : UEs 6, 7, 8 ---
-    elif 6 <= index <= 8:
+
+    elif 30 <= index <= 49:
         return {
-            "traffic_type": "UNIFORM",
-            "mobility_type": "Circle"
-        }
-    
-    # --- [NORMAL] : UEs 9, 10, 11 ---
-    elif 9 <= index <= 11:
-        return {
-            "traffic_type": "NORMAL",
+            "traffic_type": "EXPONENTIAL", 
             "mobility_type": "Linear"
         }
-    
-    # --- [ONOFF] : UEs 12, 13, 14 ---
-    elif 12 <= index <= 14:
+
+    elif 50 <= index <= 69:
         return {
-            "traffic_type": "ONOFF",
-            "mobility_type": "GaussMarkov"
-        }
-    
-    # --- [PPBP / PARETO] : UEs 15, 16, 17 ---
-    elif 15 <= index <= 17:
-        return {
-            "traffic_type": "PPBP",
+            "traffic_type": "UNIFORM", 
             "mobility_type": "Stationary"
         }
-    
-    # --- [AR1 / AUTOREGRESSIVE] : UEs 18, 19 ---
-    elif 18 <= index <= 19:
+
+    elif 70 <= index <= 84:
         return {
-            "traffic_type": "AR1",
+            "traffic_type": "NORMAL", 
+            "mobility_type": "GaussMarkov"
+        }
+
+    elif 85 <= index <= 99:
+        return {
+            "traffic_type": "ONOFF", 
             "mobility_type": "Linear"
         }
-    
-    # Cas par défaut
+
     else:
         return {
-            "traffic_type": "DETERMINISTIC",
+            "traffic_type": "DETERMINISTIC", 
             "mobility_type": "Stationary"
         }
 
