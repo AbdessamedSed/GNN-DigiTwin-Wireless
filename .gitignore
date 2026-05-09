@@ -21,3 +21,4 @@ __pycache__/
 run.txt
 .DS_Store
 simulations/**/data.json
+simulations/**/data.json
