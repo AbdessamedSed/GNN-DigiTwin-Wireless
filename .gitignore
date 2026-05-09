@@ -20,3 +20,4 @@ __pycache__/
 *.log
 run.txt
 .DS_Store
+simulations/**/data.json
