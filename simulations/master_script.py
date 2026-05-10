@@ -44,52 +44,14 @@ def get_ue_metadata(ue_id_string):
     
     index = int(match.group())
     
-    if 0 <= index <= 15:
-        # Code ini: sendInterval = 0.005s (Fixe)
-        return {
-            "traffic_type": "DETERMINISTIC", 
-            "mobility_type": "GaussMarkov",
-        }
-    elif 16 <= index <= 32:
-        # Code ini: sendInterval = 0.002s (Fixe)
-        return {
-            "traffic_type": "DETERMINISTIC", 
-            "mobility_type": "Linear",
-        }
-
-    # --- TRANCHE URLLC (33 à 65) ---
-    elif 33 <= index <= 48:
-        # Code ini: sendInterval = exponential(0.01s)
-        return {
-            "traffic_type": "EXPONENTIAL", 
-            "mobility_type": "Circle",
-        }
-    elif 49 <= index <= 65:
-        # Code ini: sendInterval = 0.001s (Fixe)
-        return {
-            "traffic_type": "DETERMINISTIC", 
-            "mobility_type": "Stationary",
-        }
-
-    # --- TRANCHE mMTC (66 à 99) ---
-    elif 66 <= index <= 80:
-        # Code ini: (uniform(0,1) < 0.1 ? 0.05s : 5s) -> Comportement Rafale
-        return {
-            "traffic_type": "ONOFF", 
-            "mobility_type": "Stationary",
-        }
-    elif 81 <= index <= 99:
-        # Code ini: sendInterval = uniform(1s, 2s)
-        return {
-            "traffic_type": "UNIFORM", 
-            "mobility_type": "Linear",
-        }
-
+    if (0 <= index <= 7) or (25 <= index <= 32) or (50 <= index <= 57):
+        return {"traffic_type": "DETERMINISTIC", "mobility_type": "RandomWaypoint"}
+    elif (8 <= index <= 15) or (33 <= index <= 40) or (58 <= index <= 65):
+        return {"traffic_type": "EXPONENTIAL", "mobility_type": "RandomWaypoint"}
+    elif (16 <= index <= 24) or (41 <= index <= 49) or (66 <= index <= 74):
+        return {"traffic_type": "ONOFF", "mobility_type": "RandomWaypoint"}
     else:
-        return {
-            "traffic_type": "DETERMINISTIC", 
-            "mobility_type": "Stationary",
-        }
+        return {"traffic_type": "DETERMINISTIC", "mobility_type": "Stationary"}
 
 # ===========================================================================
 # 2. PARAMÈTRES DE VARIATION ET CHEMINS
@@ -99,7 +61,7 @@ POWERS = ["0.01W", "0.1W", "0.5W", "2W"]
 SCHEDULERS = ["PF", "MAXCI", "DRR",  "QOS_PF", "MAXCI_MB", "ALLOCATOR_BESTFIT"]
 QUEUE_SIZES = ["50KiB", "100KiB", "2MiB", "10MiB"]
 
-SCENARIO_PREFIX = "SC04"
+SCENARIO_PREFIX = "SC05"
 INI_FILE = "omnetpp.ini"
 CONFIG_NAME = "DT-Scenario"
 
