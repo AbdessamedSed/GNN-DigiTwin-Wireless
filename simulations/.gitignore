@@ -1,0 +1,11 @@
+
+# OMNeT++ / Simu5G temporary outputs
+simulations/*.log
+simulations/network_state.json
+simulations/network_state_latest.json
+simulations/dtConnector_Links.csv
+simulations/run_generation.log
+
+# Build outputs
+out/
+**/out/
