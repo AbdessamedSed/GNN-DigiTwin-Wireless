@@ -61,7 +61,7 @@ POWERS = ["0.5W"]
 SCHEDULERS = ["PF", "MAXCI", "DRR"]
 QUEUE_SIZES = ["2MiB"]
 
-SCENARIO_PREFIX = "test"
+SCENARIO_PREFIX = "test2_embb"
 INI_FILE = "omnetpp.ini"
 CONFIG_NAME = "DT-Scenario"
 
@@ -70,7 +70,6 @@ NED_PATH = "../src:../../Simu5G/src:../../inet4.5/src"
 LIB_INET = "../../inet4.5/src/INET"
 LIB_SIMU5G = "../../Simu5G/src/simu5g"
 
-# Fichier global pour résumer le temps de génération de toutes les configurations
 RUNTIME_SUMMARY_CSV = "runtime_generation_summary.csv"
 
 # ===========================================================================
@@ -310,17 +309,11 @@ def run_all_scenarios():
                 error_msg = ""
 
                 try:
-                    # -------------------------------------------------------
-                    # TEMPS RÉEL DE GÉNÉRATION OMNeT++ / Simu5G
-                    # -------------------------------------------------------
                     sim_start = time.perf_counter()
                     subprocess.run(command, check=True)
                     sim_end = time.perf_counter()
                     simulation_time_s = sim_end - sim_start
 
-                    # -------------------------------------------------------
-                    # TEMPS DE POST-TRAITEMENT JSON
-                    # -------------------------------------------------------
                     proc_start = time.perf_counter()
 
                     raw_json = "network_state.json"
@@ -378,7 +371,7 @@ def run_all_scenarios():
                         "error": error_msg
                     }
 
-                    write_runtime_json(folder_name, runtime_info)   
+                    write_runtime_json(folder_name, runtime_info)
                     append_runtime_summary(runtime_info)
 
                     print(f"   ⏱️ Temps simulation : {runtime_info['simulation_time_s']} s")

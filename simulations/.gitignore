@@ -1,11 +1,27 @@
+# OMNeT++ / Simu5G heavy result files
+results/
+*.vec
+*.sca
+*.vci
+*.elog
+*.anf
 
-# OMNeT++ / Simu5G temporary outputs
-simulations/*.log
-simulations/network_state.json
-simulations/network_state_latest.json
-simulations/dtConnector_Links.csv
-simulations/run_generation.log
+# Temporary simulation outputs
+*.log
+run_*.log
+network_state.json
+network_state_latest.json
+dtConnector_Links.csv
+sent_packet_ids.txt
 
-# Build outputs
-out/
-**/out/
+# OMNeT++ backups
+omnetpp.ini.backup_*
+omnetpp.ini.bak_*
+omnetpp.ini.bak*
+*.backup
+*.bak
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
