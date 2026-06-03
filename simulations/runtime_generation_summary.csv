@@ -1,0 +1,4 @@
+iteration,folder_name,power,scheduler,queue_size,status,start_datetime,end_datetime,simulation_time_s,processing_time_s,total_pipeline_time_s,num_snapshots,error
+1,01)test2_embb-P=0.5W-S=PF-Q=2MiB,0.5W,PF,2MiB,SUCCESS,2026-06-02T15:16:44,2026-06-02T15:19:05,139.650319,0.946368,140.596689,1200,
+2,02)test2_embb-P=0.5W-S=MAXCI-Q=2MiB,0.5W,MAXCI,2MiB,SUCCESS,2026-06-02T15:19:05,2026-06-02T15:21:32,145.842731,0.960299,146.803033,1200,
+3,03)test2_embb-P=0.5W-S=DRR-Q=2MiB,0.5W,DRR,2MiB,SUCCESS,2026-06-02T15:21:32,2026-06-02T15:24:22,169.742849,0.929622,170.672474,1200,
