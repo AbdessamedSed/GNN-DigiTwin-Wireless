@@ -10,7 +10,7 @@ import math
 from datetime import datetime
 
 # ===========================================================================
-# 1. CONFIGURATION DES MÉTADONNÉES SC06
+# 1. CONFIGURATION DES MÉTADONNÉES SC07
 # ===========================================================================
 def get_ue_metadata(ue_id_string):
     """
@@ -32,10 +32,10 @@ def get_ue_metadata(ue_id_string):
     elif 24 <= index <= 35:
         return {"traffic_type": "UNIFORM", "mobility_type": "Circle"}
 
-    elif 36 <= index <= 41:
+    elif 36 <= index <= 47:
         return {"traffic_type": "ONOFF", "mobility_type": "GaussMarkov"}
 
-    elif 42 <= index <= 47:
+    elif 48 <= index <= 59:
         return {"traffic_type": "PPBP", "mobility_type": "Linear"}
 
     else:
@@ -48,15 +48,14 @@ POWERS = ["0.01W", "0.1W", "0.5W", "2W"]
 SCHEDULERS = ["PF", "MAXCI", "DRR", "QOS_PF", "MAXCI_MB", "ALLOCATOR_BESTFIT"]
 QUEUE_SIZES = ["50 KiB", "100KiB", "2MiB", "10MiB"]
 
-SCENARIO_PREFIX = "SC06"
+SCENARIO_PREFIX = "SC07"
 INI_FILE = "omnetpp.ini"
 CONFIG_NAME = "DT-Scenario"
 
 PROJECT_BINARY = "../out/clang-release/FiveG_network"
-NED_PATH = "../src:../../Simu5G/src:../../inet4.5/src"
+NED_PATH = "../src:/home/abdessamedseddiki/omnet/simu5g-1.4.1/src:/home/abdessamedseddiki/omnet/inet4.5/src"
 LIB_INET = "../../inet4.5/src/INET"
-LIB_SIMU5G = "../../Simu5G/src/simu5g"
-
+LIB_SIMU5G = "../../simu5g-1.4.1/src/simu5g"
 RUNTIME_SUMMARY_CSV = "runtime_generation_summary.csv"
 
 # Si True, le script saute les configurations qui ont déjà un data.json
@@ -177,7 +176,7 @@ def generate_real_plots(json_path, output_folder):
 
     os.makedirs(output_folder, exist_ok=True)
 
-    target_ues = ["ue0", "ue8", "ue12", "ue20", "ue24", "ue32", "ue36", "ue41", "ue42", "ue47"]
+    target_ues = ["ue0", "ue10", "ue12", "ue23", "ue24", "ue35", "ue36", "ue47", "ue48", "ue59"]
     metrics = ["throughput", "delay", "sinr_ul", "sinr_dl", "x", "y", "rlcDelay", "rlcThroughput"]
 
     for metric in metrics:
