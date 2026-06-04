@@ -6,77 +6,67 @@ import matplotlib.pyplot as plt
 import shutil
 import time
 import csv
+import math
 from datetime import datetime
 
 # ===========================================================================
-# 1. CONFIGURATION DES MÉTADONNÉES
+# 1. CONFIGURATION DES MÉTADONNÉES SC08
 # ===========================================================================
 def get_ue_metadata(ue_id_string):
     """
     Associe un type de trafic et de mobilité à chaque UE selon son index.
-    Les UEs 0..14 suivent la logique originale.
-    Les UEs 15..29 répètent exactement la même logique avec index % 15.
+    Les labels restent compatibles avec la logique utilisée dans les autres scripts.
     """
     match = re.search(r'\d+', ue_id_string)
     if not match:
         return {"traffic_type": "Unknown", "mobility_type": "Unknown"}
 
     index = int(match.group())
-    group = index % 15
 
-    if 0 <= group <= 2:
-        return {"traffic_type": "EXPONENTIAL", "mobility_type": "GaussMarkov"}
+    if 0 <= index <= 5:
+        return {"traffic_type": "EXPONENTIAL", "mobility_type": "Stationary"}
 
-    elif 3 <= group <= 4:
-        return {"traffic_type": "DETERMINISTIC", "mobility_type": "Linear"}
-
-    elif 5 <= group <= 6:
-        return {"traffic_type": "UNIFORM", "mobility_type": "Circle"}
-
-    elif 7 <= group <= 8:
+    elif 6 <= index <= 11:
         return {"traffic_type": "DETERMINISTIC", "mobility_type": "Stationary"}
 
-    elif group == 9:
-        return {"traffic_type": "ONOFF", "mobility_type": "GaussMarkov"}
+    elif 12 <= index <= 17:
+        return {"traffic_type": "UNIFORM", "mobility_type": "Stationary"}
 
-    elif 10 <= group <= 11:
-        return {"traffic_type": "PPBP", "mobility_type": "Linear"}
+    elif 18 <= index <= 23:
+        return {"traffic_type": "ONOFF", "mobility_type": "Stationary"}
 
-    elif group == 12:
-        return {"traffic_type": "DETERMINISTIC", "mobility_type": "Circle"}
-
-    elif group == 13:
-        return {"traffic_type": "DETERMINISTIC", "mobility_type": "Stationary"}
-
-    elif group == 14:
-        return {"traffic_type": "DETERMINISTIC", "mobility_type": "GaussMarkov"}
+    elif 24 <= index <= 29:
+        return {"traffic_type": "PPBP", "mobility_type": "Stationary"}
 
     else:
-        return {"traffic_type": "DETERMINISTIC", "mobility_type": "Stationary"}
+        return {"traffic_type": "Unknown", "mobility_type": "Unknown"}
 
 # ===========================================================================
 # 2. PARAMÈTRES DE VARIATION ET CHEMINS
 # ===========================================================================
-POWERS = ["0.5W"]
-SCHEDULERS = ["PF", "MAXCI", "DRR"]
-QUEUE_SIZES = ["2MiB"]
+POWERS = ["0.01W", "0.1W", "0.5W", "2W"]
+SCHEDULERS = ["PF", "MAXCI", "DRR", "QOS_PF", "MAXCI_MB", "ALLOCATOR_BESTFIT"]
+QUEUE_SIZES = ["50 KiB", "100KiB", "2MiB", "10MiB"]
 
-SCENARIO_PREFIX = "test2_embb"
+SCENARIO_PREFIX = "SC08"
 INI_FILE = "omnetpp.ini"
 CONFIG_NAME = "DT-Scenario"
 
 PROJECT_BINARY = "../out/clang-release/FiveG_network"
-NED_PATH = "../src:../../Simu5G/src:../../inet4.5/src"
-LIB_INET = "../../inet4.5/src/INET"
-LIB_SIMU5G = "../../Simu5G/src/simu5g"
+NED_PATH = "../src:/home/abdessamedseddiki/omnet/simu5g-1.4.1/src:/home/abdessamedseddiki/omnet/inet4.5/src"
+LIB_INET = "/home/abdessamedseddiki/omnet/inet4.5/src/INET"
+LIB_SIMU5G = "/home/abdessamedseddiki/omnet/simu5g-1.4.1/src/simu5g"
 
 RUNTIME_SUMMARY_CSV = "runtime_generation_summary.csv"
+
+# Si True, le script saute les configurations qui ont déjà un data.json
+SKIP_SUCCESS = True
 
 # ===========================================================================
 # 3. FONCTIONS DE TRAITEMENT ET NETTOYAGE DU JSON
 # ===========================================================================
 def decrement_gnb_name(name):
-    """Transforme 'gnb1' en 'gnb0'."""
+    """Transforme 'gnb1' en 'gnb0', 'gnb2' en 'gnb1', etc."""
     if not name or name.lower() == "none":
         return name
     match = re.match(r"([a-zA-Z]+)(\d+)", name)
@@ -85,13 +75,56 @@ def decrement_gnb_name(name):
     return name
 
 
+def load_json_safely(input_path):
+    """
+    Charge le JSON OMNeT++ même s'il contient nan, inf, -inf, etc.
+    Tous ces tokens invalides sont remplacés par 0.0 avant json.loads().
+    """
+    with open(input_path, "r", encoding="utf-8", errors="replace") as f:
+        raw = f.read()
+
+    pattern = re.compile(
+        r'(?P<prefix>[:\[,]\s*)(?P<value>[+-]?(?:nan|inf|infinity))(?P<suffix>\s*[,}\]])',
+        re.IGNORECASE
+    )
+
+    raw = pattern.sub(lambda m: m.group("prefix") + "0.0" + m.group("suffix"), raw)
+
+    return json.loads(raw)
+
+
+def sanitize_positive_numbers(obj):
+    """
+    Parcourt récursivement le JSON.
+    Toute valeur numérique invalide, NaN, inf, -inf, ou négative devient 0.
+    Les chaînes comme qsize, traffic_type, mobility_type ne sont pas modifiées.
+    """
+    if isinstance(obj, dict):
+        return {k: sanitize_positive_numbers(v) for k, v in obj.items()}
+
+    if isinstance(obj, list):
+        return [sanitize_positive_numbers(v) for v in obj]
+
+    if isinstance(obj, float):
+        if not math.isfinite(obj) or obj < 0:
+            return 0.0
+        return obj
+
+    if isinstance(obj, int):
+        if obj < 0:
+            return 0
+        return obj
+
+    return obj
+
+
 def process_simulation_json(input_path, output_path, power, sched, queue):
     """Nettoie le JSON brut et ajoute les attributs demandés."""
     if not os.path.exists(input_path):
         return False
 
-    with open(input_path, 'r', encoding='utf-8') as f:
-        data = json.load(f)
+    data = load_json_safely(input_path)
+    data = sanitize_positive_numbers(data)
 
     for entry in data:
         if "nodes" in entry:
@@ -144,7 +177,7 @@ def generate_real_plots(json_path, output_folder):
 
     os.makedirs(output_folder, exist_ok=True)
 
-    target_ues = ["ue0", "ue4", "ue8", "ue12", "ue14", "ue15", "ue19", "ue23", "ue27", "ue29"]
+    target_ues = ["ue0", "ue5", "ue6", "ue11", "ue12", "ue17", "ue18", "ue23", "ue24", "ue29"]
     metrics = ["throughput", "delay", "sinr_ul", "sinr_dl", "x", "y", "rlcDelay", "rlcThroughput"]
 
     for metric in metrics:
@@ -286,6 +319,12 @@ def run_all_scenarios():
                 print(f"\n🚀 SIMULATION {iteration}/{total} : {folder_name}")
 
                 os.makedirs(folder_name, exist_ok=True)
+
+                output_json_existing = os.path.join(folder_name, "data.json")
+                if SKIP_SUCCESS and os.path.exists(output_json_existing):
+                    print(f"   ⏭️ Déjà généré, skip : {folder_name}")
+                    iteration += 1
+                    continue
 
                 command = [
                     PROJECT_BINARY, "-u", "Cmdenv", "-c", CONFIG_NAME, "-r", "0",
