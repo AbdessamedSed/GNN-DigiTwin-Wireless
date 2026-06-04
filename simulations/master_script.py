@@ -10,7 +10,7 @@ import math
 from datetime import datetime
 
 # ===========================================================================
-# 1. CONFIGURATION DES MÉTADONNÉES SC06
+# 1. CONFIGURATION DES MÉTADONNÉES SC08
 # ===========================================================================
 def get_ue_metadata(ue_id_string):
     """
@@ -23,20 +23,20 @@ def get_ue_metadata(ue_id_string):
 
     index = int(match.group())
 
-    if 0 <= index <= 11:
-        return {"traffic_type": "EXPONENTIAL", "mobility_type": "GaussMarkov"}
+    if 0 <= index <= 5:
+        return {"traffic_type": "EXPONENTIAL", "mobility_type": "Stationary"}
 
-    elif 12 <= index <= 23:
-        return {"traffic_type": "DETERMINISTIC", "mobility_type": "Linear"}
+    elif 6 <= index <= 11:
+        return {"traffic_type": "DETERMINISTIC", "mobility_type": "Stationary"}
 
-    elif 24 <= index <= 35:
-        return {"traffic_type": "UNIFORM", "mobility_type": "Circle"}
+    elif 12 <= index <= 17:
+        return {"traffic_type": "UNIFORM", "mobility_type": "Stationary"}
 
-    elif 36 <= index <= 41:
-        return {"traffic_type": "ONOFF", "mobility_type": "GaussMarkov"}
+    elif 18 <= index <= 23:
+        return {"traffic_type": "ONOFF", "mobility_type": "Stationary"}
 
-    elif 42 <= index <= 47:
-        return {"traffic_type": "PPBP", "mobility_type": "Linear"}
+    elif 24 <= index <= 29:
+        return {"traffic_type": "PPBP", "mobility_type": "Stationary"}
 
     else:
         return {"traffic_type": "Unknown", "mobility_type": "Unknown"}
@@ -48,14 +48,14 @@ POWERS = ["0.01W", "0.1W", "0.5W", "2W"]
 SCHEDULERS = ["PF", "MAXCI", "DRR", "QOS_PF", "MAXCI_MB", "ALLOCATOR_BESTFIT"]
 QUEUE_SIZES = ["50 KiB", "100KiB", "2MiB", "10MiB"]
 
-SCENARIO_PREFIX = "SC06"
+SCENARIO_PREFIX = "SC08"
 INI_FILE = "omnetpp.ini"
 CONFIG_NAME = "DT-Scenario"
 
 PROJECT_BINARY = "../out/clang-release/FiveG_network"
-NED_PATH = "../src:../../Simu5G/src:../../inet4.5/src"
-LIB_INET = "../../inet4.5/src/INET"
-LIB_SIMU5G = "../../Simu5G/src/simu5g"
+NED_PATH = "../src:/home/abdessamedseddiki/omnet/simu5g-1.4.1/src:/home/abdessamedseddiki/omnet/inet4.5/src"
+LIB_INET = "/home/abdessamedseddiki/omnet/inet4.5/src/INET"
+LIB_SIMU5G = "/home/abdessamedseddiki/omnet/simu5g-1.4.1/src/simu5g"
 
 RUNTIME_SUMMARY_CSV = "runtime_generation_summary.csv"
 
@@ -177,7 +177,7 @@ def generate_real_plots(json_path, output_folder):
 
     os.makedirs(output_folder, exist_ok=True)
 
-    target_ues = ["ue0", "ue8", "ue12", "ue20", "ue24", "ue32", "ue36", "ue41", "ue42", "ue47"]
+    target_ues = ["ue0", "ue5", "ue6", "ue11", "ue12", "ue17", "ue18", "ue23", "ue24", "ue29"]
     metrics = ["throughput", "delay", "sinr_ul", "sinr_dl", "x", "y", "rlcDelay", "rlcThroughput"]
 
     for metric in metrics:
