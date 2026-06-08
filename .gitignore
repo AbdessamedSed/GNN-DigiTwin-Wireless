@@ -1,27 +1,14 @@
-# Python
+out/
+*.o
+*.d
+*.log
+*.vec
+*.sca
+*.vci
+network_state.json
+run.txt
 __pycache__/
-*.py[cod]
-*.pyd
-*.pyo
-.Python
-
-# Virtual environments
-venv/
-.env/
-env/
-
-# Data files (large)
-*.json
-!checkpoints/summary.json
-
-# Jupyter
-.ipynb_checkpoints/
-
-# IDE
-.vscode/
-.idea/
-*.swp
-
-# OS
-.DS_Store
-Thumbs.db
+plots/
+results/
+failed_*/
+*.zip
