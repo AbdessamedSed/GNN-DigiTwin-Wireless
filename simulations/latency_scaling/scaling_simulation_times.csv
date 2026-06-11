@@ -1,0 +1,16 @@
+folder,S,U,G,P,scheduler,Q,R,runtime_sec,runtime_human,source,has_data_json,data_json_size_MB
+01)LAT-S15-U=15-G=1-P=0.5W-S=PF-Q=100KiB-R=0,15,15,1,0.5W,PF,100KiB,0,50.0,50.00s,computed from timestamps: start_datetime -> end_datetime,True,15.746
+02)LAT-S15-U=15-G=1-P=0.5W-S=PF-Q=100KiB-R=1,15,15,1,0.5W,PF,100KiB,1,52.0,52.00s,computed from timestamps: start_datetime -> end_datetime,True,15.744
+03)LAT-S15-U=15-G=1-P=0.5W-S=PF-Q=100KiB-R=2,15,15,1,0.5W,PF,100KiB,2,50.0,50.00s,computed from timestamps: start_datetime -> end_datetime,True,15.75
+04)LAT-S30-U=30-G=2-P=0.5W-S=PF-Q=100KiB-R=0,30,30,2,0.5W,PF,100KiB,0,103.0,1.72min,computed from timestamps: start_datetime -> end_datetime,True,31.432
+05)LAT-S30-U=30-G=2-P=0.5W-S=PF-Q=100KiB-R=1,30,30,2,0.5W,PF,100KiB,1,108.0,1.80min,computed from timestamps: start_datetime -> end_datetime,True,31.436
+06)LAT-S30-U=30-G=2-P=0.5W-S=PF-Q=100KiB-R=2,30,30,2,0.5W,PF,100KiB,2,109.0,1.82min,computed from timestamps: start_datetime -> end_datetime,True,31.438
+07)LAT-S60-U=60-G=4-P=0.5W-S=PF-Q=100KiB-R=0,60,60,4,0.5W,PF,100KiB,0,220.0,3.67min,computed from timestamps: start_datetime -> end_datetime,True,62.802
+08)LAT-S60-U=60-G=4-P=0.5W-S=PF-Q=100KiB-R=1,60,60,4,0.5W,PF,100KiB,1,243.0,4.05min,computed from timestamps: start_datetime -> end_datetime,True,62.81
+09)LAT-S60-U=60-G=4-P=0.5W-S=PF-Q=100KiB-R=2,60,60,4,0.5W,PF,100KiB,2,245.0,4.08min,computed from timestamps: start_datetime -> end_datetime,True,62.809
+10)LAT-S100-U=100-G=4-P=0.5W-S=PF-Q=100KiB-R=0,100,100,4,0.5W,PF,100KiB,0,365.0,6.08min,computed from timestamps: start_datetime -> end_datetime,True,103.365
+11)LAT-S100-U=100-G=4-P=0.5W-S=PF-Q=100KiB-R=1,100,100,4,0.5W,PF,100KiB,1,423.0,7.05min,computed from timestamps: start_datetime -> end_datetime,True,103.448
+12)LAT-S100-U=100-G=4-P=0.5W-S=PF-Q=100KiB-R=2,100,100,4,0.5W,PF,100KiB,2,423.0,7.05min,computed from timestamps: start_datetime -> end_datetime,True,103.399
+13)LAT-S150-U=150-G=4-P=0.5W-S=PF-Q=100KiB-R=0,150,150,4,0.5W,PF,100KiB,0,565.0,9.42min,computed from timestamps: start_datetime -> end_datetime,True,153.982
+14)LAT-S150-U=150-G=4-P=0.5W-S=PF-Q=100KiB-R=1,150,150,4,0.5W,PF,100KiB,1,664.0,11.07min,computed from timestamps: start_datetime -> end_datetime,True,154.087
+15)LAT-S150-U=150-G=4-P=0.5W-S=PF-Q=100KiB-R=2,150,150,4,0.5W,PF,100KiB,2,661.0,11.02min,computed from timestamps: start_datetime -> end_datetime,True,154.161
