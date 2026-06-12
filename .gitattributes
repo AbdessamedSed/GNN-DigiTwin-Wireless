@@ -1,1 +1,2 @@
 SC*/data/**/data.json filter=lfs diff=lfs merge=lfs -text
+LAT_R1_data/*.json filter=lfs diff=lfs merge=lfs -text
