@@ -1,0 +1,31 @@
+Level,Attribute,Description,Unit,Value type,Evidence
+snapshot,timestamp,Simulation snapshot timestamp,time unit to verify,numeric,Observed
+node,id,Unique identifier of the node,none,string,Observed
+node,type,"Node category (e.g., ue)",none,string,Observed
+node,serving_gnb,Identifier of the gNB serving this UE,none,string,Observed
+node,x,Node x-coordinate,coordinate unit to verify,numeric,Observed
+node,y,Node y-coordinate,coordinate unit to verify,numeric,Observed
+node,speed,Node mobility speed,speed unit to verify,numeric,Observed
+node,sinr_dl,Downlink signal-to-interference-plus-noise ratio,unit to verify (possibly dB),numeric,Observed
+node,sinr_ul,Uplink signal-to-interference-plus-noise ratio,unit to verify (possibly dB),numeric,Observed
+node,qsize,Configured queue/buffer size,as encoded (e.g. 50KiB),string,Observed
+node,traffic_type,Traffic generation/distribution type,none,string,Observed
+node,mobility_type,Mobility model name,none,string,Observed
+flow,type,"Flow direction/type (e.g., DL)",none,string,Observed
+flow,src,Flow source identifier,none,string,Observed
+flow,dst,Flow destination identifier,none,string,Observed
+flow,packet_size,Packet size parameter,size unit to verify,numeric,Observed
+flow,interval,Traffic packet generation interval,time unit to verify,numeric,Observed
+flow,throughput,Flow-level throughput measurement,throughput unit to verify,numeric,Observed
+flow,delay,MAC-layer delay (macDelay); distinct from rlcDelay,time unit to verify,numeric,User clarification
+flow,packet_loss,Flow-level packet loss metric,definition/unit to verify,numeric,Observed
+flow,rlcDelay,RLC-layer delay; distinct from MAC-layer delay,time unit to verify,numeric,User clarification
+flow,macBufferOverflow,MAC buffer overflow indicator or count,definition/unit to verify,numeric,Observed
+flow,harqErrorRate,HARQ error rate,ratio/percentage to verify,numeric,Observed
+flow,harqTxAttempts,Number of HARQ transmission attempts,count,integer,Observed
+flow,receivedPacketFromUpperLayer,Packets received from upper layer (counter),count,integer,Observed
+flow,receivedPacketFromLowerLayer,Packets received from lower layer (counter),count,integer,Observed
+flow,sentPacketToLowerLayer,Packets sent to lower layer (counter),count,integer,Observed
+flow,sentPacketToUpperLayer,Packets sent to upper layer (counter),count,integer,Observed
+flow,rlcThroughput,RLC-layer throughput measurement,throughput unit to verify,numeric,Observed
+flow,rlcPacketLoss,RLC-layer packet loss metric,definition/unit to verify,numeric,Observed
